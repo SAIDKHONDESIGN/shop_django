@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+{% load oson_tags %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      {% block title %}
+
+      {% endblock %}
+    </title>
+    {% include 'components/_links.html' %}
+    {% block extra_style %}
+
+    {% endblock %}
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home' %}">Oson</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Главная Страница</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'products' %}">Товары</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Категория</a>
+              <ul class="dropdown-menu">
+                {% get_categories as categories %}
+                {% for category in categories %}
+                  <li>
+                    <a class="dropdown-item" href="{% url 'category' category.pk %}">{{ category }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'favorite' %}">Избранное</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'basket' %}">Корзина</a>
+            </li>
+          </ul>
+          {% if request.user.is_authenticated %}
+            <a href="{% url 'create' %}" class="btn btn-info me-3">Опубликовать нового товара</a>
+          {% endif %}
+          <form class="d-flex" role="search" action="{% url 'search' %}">
+            <input name="q" class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search" />
+            <button class="btn btn-outline-success" type="submit">Поиск</button>
+          </form>
+          <div class="ms-3">
+            {% if not request.user.is_authenticated %}
+              <a href="{% url 'login' %}" class="btn btn-primary">Войти</a>
+              <a href="{% url 'registration' %}" class="btn btn-warning">Регистряция</a>
+            {% else %}
+              <a href="{% url 'profile' %}" class="btn btn-info">Профил</a>
+              <a href="{% url 'logout' %}" class="btn btn-danger">Выйти</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </nav>
+    {% block content %}
+
+    {% endblock %}
+    {% include 'components/_footer.html' %}
+
+    {% block extra_js %}
+
+    {% endblock %}
+  </body>
+</html>

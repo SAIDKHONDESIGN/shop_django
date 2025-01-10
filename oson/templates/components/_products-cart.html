@@ -1,0 +1,28 @@
+<div class="row justify-content-center">
+  {% for product in products %}
+    <div class="col-md-5">
+      <div class="card mt-3 mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img style="width: 100%; height: 100%;" src="{{ product.preview.url }}" class="img-fluid rounded-start" alt="..." />
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ product.name }}</h5>
+              <p class="card-text">{{ product.short_description }}</p>
+              <p class="card-text">
+                <small class="text-body-secondary"><b>Категория:</b> {{ product.category }}</small><br />
+                <small class="text-body-secondary"><b>Цена:</b> {{ product.price }}$</small><br />
+                <small class="text-body-secondary"><b>Добавлено:</b> {{ product.created_at }}</small><br />
+                <small class="text-body-secondary"><b>В наличии:</b> {{ product.in_stock }}</small><br />
+                <small class="text-body-secondary"><b>Просмотри:</b> {{ product.views }}</small><br />
+                <small class="text-body-secondary"><b>Продавец:</b> {{ product.author }}</small>
+              </p>
+              <a href="{% url 'products_detail' product.pk %}">Подробнее</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>

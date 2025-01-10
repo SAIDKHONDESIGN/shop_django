@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Profile edit
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-3">
+    <form action="" enctype="multipart/form-data" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="user_id" value="{{ request.user.id }}" />
+      <input type="hidden" name="user_profile_id" value="{{ request.user.profile.id }}" />
+      <p class="mb-3">
+        <input value="{{ request.user.username }}" class="form-control" type="text" placeholder="username" name="username" />
+      </p>
+      <p class="mb-3">
+        <input class="form-control" type="file" name="avatar" />
+      </p>
+      <p class="mb-3">
+        <textarea class="form-control" name="bio">{{ request.user.profile.bio }}</textarea>
+      </p>
+
+      <button class="btn btn-info">Пременить изменение</button>
+    </form>
+  </div>
+{% endblock %}

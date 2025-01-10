@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Категория: {{ category.name }}
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-3">
+    <div class="d-flex my-4 align-items-center justify-content-between">
+      <h1>{{ category.name }}</h1>
+      <div class="d-flex gap-3">
+        {% if request.environ.QUERY_STRING == 'sort=-views' %}
+          <a href="?sort=views">По просмотрам</a>
+        {% else %}
+          <a href="?sort=-views">По просмотрам</a>
+        {% endif %}
+
+        {% if request.environ.QUERY_STRING == 'sort=-created_at' %}
+          <a href="?sort=created_at">По дате</a>
+        {% else %}
+          <a href="?sort=-created_at">По дате</a>
+        {% endif %}
+        {% if request.environ.QUERY_STRING == 'sort=-name' %}
+          <a href="?sort=name">А-Я</a>
+        {% else %}
+          <a href="?sort=-name">А-Я</a>
+        {% endif %}
+      </div>
+    </div>
+    <section class="mb-5">
+      {% include 'components/_products-cart.html' %}
+    </section>
+  </div>
+{% endblock %}

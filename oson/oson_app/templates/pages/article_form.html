@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Создать/Обновить продукта
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-3">
+    <form action="" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="file" name="image" multiple id="" class="form-control mb-3" />
+      <button class="btn btn-dark">Опубликовать</button>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Profile
+{% endblock %}
+
+{% block extra_style %}
+  <style>
+    .profile-card {
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      background-color: #fff;
+    }
+    
+    .profile-card .card-header {
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 10px 10px 0 0;
+      text-align: center;
+    }
+    
+    .profile-card .profile-image {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 20px;
+    }
+    
+    .profile-card .profile-info h5 {
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 5px;
+    }
+    
+    .profile-card .profile-info p {
+      font-size: 16px;
+      color: #333;
+    }
+    
+    .img-fluid {
+      height: 200px;
+      width: 200px;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-3">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-primary text-white text-center">
+            <h4>Мой Профиль</h4>
+          </div>
+          <div class="card-body">
+            <div class="text-center mb-3">
+              <img src="{{ user.profile.avatar.url }}" alt="" class="img-fluid rounded-circle" />
+            </div>
+
+            <div class="mb-3">
+              <h1 class="font-weight-bold text-center">{{ request.user.username }}</h1>
+            </div>
+
+            <div class="mb-3">
+              <h5 class="font-weight-bold">About</h5>
+              <p>{{ request.user.profile.bio }}</p>
+            </div>
+
+            <div class="mb-3">
+              <h5 class="font-weight-bold">Email</h5>
+              {% if request.user.email %}
+                <p>{{ request.user.email }}</p>
+              {% else %}
+                <p>Нет email</p>
+              {% endif %}
+            </div>
+
+            <div class="text-center">
+              {% if request.user.profile %}
+                <a href="{% url 'profile_edit' request.user.profile.id %}" class="btn btn-primary">Редактировать аккаунт</a><br />
+              {% endif %}
+              <a href="{% url 'home' %}" class="btn btn-secondary mt-2">Назад на главную</a>
+            </div>
+          </div>
+          {% if message %}
+            <div class="alert alert-warning">{{ message }}</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

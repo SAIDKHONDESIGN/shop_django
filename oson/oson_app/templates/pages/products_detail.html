@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Product: {{ product.name }}
+{% endblock %}
+
+{% block extra_style %}
+  <style>
+    body {
+      position: relative;
+      height: 100%;
+    }
+    
+    body {
+      background: #eee;
+      font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      color: #000;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .swiper {
+      width: 300px;
+      height: 300px;
+      position: absolute;
+      left: 25%;
+      top: 200px;
+      margin-top: -80px;
+    }
+    
+    .swiper-slide {
+      background-position: center;
+      background-size: cover;
+    }
+    
+    .swiper-slide img {
+      border: medium solid rgb(22, 20, 20);
+      display: block;
+      width: 100%;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-6">
+        <div class="swiper mySwiper">
+          <div class="swiper-wrapper">
+            {% for image in gallery %}
+              <div class="swiper-slide">
+                <img style="width: 300px; height: 300px;" src="{{ image.image.url }}" />
+              </div>
+            {% empty %}
+              <h3>Галлерия пуста</h3>
+            {% endfor %}
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+      <div class="col-6 mb-5">
+        <h1 class="text-center mb-4">{{ product.name }}</h1>
+        <div class="row justify-content-between align-items-end mb-4">
+          <div class="col-6">
+            <b>Краткое описание:</b>
+            <p class="fs-5 mb-0">{{ product.short_description }}</p>
+          </div>
+        </div>
+        <ul class="list-group list-group-action mb-3">
+          <li class="list-group-item list-group-item-action">
+            <b>Продавец:</b> {{ product.author }}
+          </li>
+          <li class="list-group-item list-group-item-action">
+            <b>Категория:</b> {{ product.category }}
+          </li>
+          <li class="list-group-item list-group-item-action">
+            <b>В наличии:</b> {{ product.in_stock }}
+          </li>
+          <li class="list-group-item list-group-item-action">
+            <b>Дата публикации:</b> {{ product.created_at }}
+          </li>
+          <li class="list-group-item list-group-item-action">
+            <b>Кол-во просмотров:</b> {{ product.views }}
+          </li>
+        </ul>
+        {% if request.user.is_authenticated and request.user == product.author %}
+          <a href="{% url 'update' product.pk %}" class="btn btn-success">Изменить</a>
+          <a href="{% url 'delete' product.pk %}" class="btn btn-danger">Удалить</a>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+          <a href="{% url 'favorite_add' product.id %}" class="btn btn-primary">Добавить в избранное</a>
+          <a href="{% url 'add_to_basket' product.id %}" class="btn btn-warning">Добавить в корзину</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="card mb-5">
+      <div class="card-header text-center fs-4">Полное описание</div>
+      <div class="card-body">{{ product.full_description }}</div>
+    </div>
+
+    <h2 class="text-center">Комментарии</h2>
+    {% for comment in comments %}
+      <div class="card mb-3">
+        <div class="card-header">{{ comment.created_at }}</div>
+        <div class="card-body">
+          <blockquote class="blockquote mb-0">
+            <p>{{ comment.text }}</p>
+            <footer class="blockquote-footer">{{ comment.author }}</footer>
+          </blockquote>
+        </div>
+      </div>
+    {% endfor %}
+
+    {% if request.user.is_authenticated %}
+      <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-dark mt-3">Отправить</button>
+      </form>
+    {% else %}
+      <p>Войдите в аккаунт, чтобы оставить комментарий</p>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    var swiper = new Swiper('.mySwiper', {
+      effect: 'cube',
+      grabCursor: true,
+      cubeEffect: {
+        shadow: true,
+        slideShadows: true,
+        shadowOffset: 20,
+        shadowScale: 0.94
+      },
+      pagination: {
+        el: '.swiper-pagination'
+      }
+    })
+  </script>
+{% endblock %}

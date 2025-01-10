@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Корзина
+{% endblock %}
+
+{% block extra_style %}
+  <style>
+    .container {
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    table th,
+    table td {
+      padding: 10px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+    table th {
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    .total {
+      text-align: right;
+      margin-top: 20px;
+    }
+    .total strong {
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+    {% if request.user.is_authenticated %}
+      <h1>Корзина</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Название товара</th>
+            <th>Количество</th>
+            <th>Цена</th>
+            <th>Общая стоимость</th>
+            <th>Действие</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for basket in baskets %}
+            <tr>
+              <td>{{ basket.product.name }}</td>
+              <td>
+                <a href="{% url 'decrease_quantity' basket.id %}" class="btn btn-sm btn-secondary me-3">-</a>
+                {{ basket.quantity }}
+                <a href="{% url 'increase_quantity' basket.id %}" class="btn btn-sm btn-secondary ms-3">+</a>
+              </td>
+              <td>{{ basket.product.price }}$</td>
+              <td>{{ basket.total_price }}$</td>
+              <td>
+                <a href="{% url 'delete_to_basket' basket.product.id %}" class="btn btn-danger">Удалить</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="total">
+        <p>
+          <strong>Общая сумма: {{ total_sum }} $</strong>
+        </p>
+        <a href="#" class="btn btn-primary">Оформить заказ</a>
+      </div>
+    {% else %}
+      <h1>Вы не вошли в аккаунт</h1>
+      <p>Войдите в аккаунт, чтобы воспользоваться корзиной</p>
+    {% endif %}
+  </div>
+{% endblock %}
